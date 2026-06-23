@@ -1,0 +1,113 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cadastro-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "02acc4ae-0491-4038-83bd-06eb67d854f8",
+      "name": "Webhook",
+      "webhookId": "99e98e2a-baca-48fa-afd9-22e83e2e7d0b"
+    },
+    {
+      "parameters": {
+        "jsCode": "const nome = $json.body.nome;\nconst email = $json.body.email;\n\nif (!nome || nome.trim() === \"\") {\n  throw new Error(\"Nome é obrigatório\");\n}\n\nif (!email || !email.includes(\"@\")) {\n  throw new Error(\"E-mail inválido\");\n}\n\nreturn [\n  {\n    json: {\n      id: Date.now(),\n      nome,\n      email,\n      dataCadastro: new Date().toISOString(),\n      status: \"Lead cadastrado com sucesso\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "915a6dfe-586b-41d1-ac63-a94a9d0c6e43",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "dc7482c9-50a0-4d47-b697-09e59aafc4fd",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"sucesso\": true,\n  \"mensagem\": \"Lead cadastrado com sucesso\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7724d4fa-89c4-4e3b-8295-60c01d6d73b2",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9a2691c9-62f4-4dbc-ba58-39e42829400e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3656b8f3118e7bad666326a3ab4aee70bb6f2c8198e1da9d77e2b8451d737927"
+  },
+  "nodeGroups": [],
+  "id": "ih4RuVoIUaI440Jk",
+  "tags": []
+}
