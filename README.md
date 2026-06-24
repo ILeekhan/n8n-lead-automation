@@ -60,3 +60,5 @@ Com o n8n rodando localmente, execute no PowerShell:
 
 Invoke-RestMethod -Uri "http://localhost:5678/webhook/cadastro-lead" -Method POST -ContentType "application/json" -Body '{"nome":"Seu Nome","email":"seu@email.com"}' | Format-Table -AutoSize
 
+Feito com 💙 por Francis Diel Fraga
+
